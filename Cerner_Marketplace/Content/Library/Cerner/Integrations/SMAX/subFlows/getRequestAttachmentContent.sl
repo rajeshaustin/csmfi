@@ -19,18 +19,19 @@ flow:
           - exception
         navigate:
           - FAILURE: on_failure
-          - SUCCESS: get_attachment
-    - get_attachment:
+          - SUCCESS: http_client_get
+    - http_client_get:
         do:
           io.cloudslang.base.http.http_client_get:
-            - url: "${get_sp('MarketPlace.smaxURL')+\"rest/\"+get_sp('MarketPlace.tenantID')+\"/ces/attachment/\"+attachmentId}"
+            - url: "${get_sp('MarketPlace.smaxURL')+'rest/'+get_sp('MarketPlace.tenantID')+'/ces/attachment/600e0b90-4ad4-4416-af7c-18386746b017'}"
             - username: "${get_sp('MarketPlace.smaxIntgUser')}"
             - password:
                 value: "${get_sp('MarketPlace.smaxIntgUserPass')}"
                 sensitive: true
-            - headers: "${'Cookie: SMAX_AUTH_TOKEN='+sso_token+';TENANTID='+get_sp('MarketPlace.tenantID')}"
+            - headers: "${'Cookie: SMAX_AUTH_TOKEN='+sso_token+';TENANTID=336419949'}"
             - content_type: image/png
-        publish: []
+        publish:
+          - attachmentContent: '${return_result}'
         navigate:
           - SUCCESS: SUCCESS
           - FAILURE: on_failure
@@ -42,12 +43,12 @@ extensions:
     steps:
       get_sso_token:
         x: 77
-        'y': 142
-      get_attachment:
-        x: 282
-        'y': 149
+        'y': 144
+      http_client_get:
+        x: 297
+        'y': 155
         navigate:
-          04266b1e-0d74-7e92-4e48-e4d6b474fc05:
+          a5a2f77d-0e68-bc66-7c18-6c62e8c11d5f:
             targetId: be7401b9-e6fd-9843-1f78-821bc7fe1e1e
             port: SUCCESS
     results:
