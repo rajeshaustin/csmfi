@@ -48,7 +48,7 @@ flow:
             - query: "${\"Id='\"+smaxRequestId+\"'\"}"
             - fields: 'DisplayLabel,RequestAttachments'
         publish:
-          - entityJsonArray: '${entity_json}'
+          - entityJsonArray: "${cs_replace(cs_json_query(entity_json,'$..properties.RequestAttachments'),'\\\"[',new_value,count)}"
           - return_result
           - error_json
           - jiraRequestResultCount: '${result_count}'
@@ -76,8 +76,8 @@ extensions:
             targetId: be7401b9-e6fd-9843-1f78-821bc7fe1e1e
             port: SUCCESS
       query_entities:
-        x: 233
-        'y': 343
+        x: 234
+        'y': 345
         navigate:
           bda183ed-3b69-fbc2-5674-6ccd90d600e5:
             targetId: be7401b9-e6fd-9843-1f78-821bc7fe1e1e
