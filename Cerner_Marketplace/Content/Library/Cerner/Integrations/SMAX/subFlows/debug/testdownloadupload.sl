@@ -1,6 +1,6 @@
-namespace: Cerner.Integrations.SMAX.subFlows
+namespace: Cerner.Integrations.SMAX.subFlows.debug
 flow:
-  name: getBinaryFile
+  name: testdownloadupload
   workflow:
     - downloadWriteFile:
         do:
@@ -15,14 +15,14 @@ extensions:
   graph:
     steps:
       downloadWriteFile:
-        x: 242
-        'y': 129
+        x: 313
+        'y': 153.421875
         navigate:
-          eabf62da-90cd-0018-2d6b-ce320ef40f55:
-            targetId: bf2ae34b-c71a-17b6-cf3f-84dc1bf44ff0
+          28dd000d-7b62-df0f-3e42-1152c28e12b7:
+            targetId: 46fd1307-3181-64e5-2a39-917c353ba163
             port: SUCCESS
     results:
       SUCCESS:
-        bf2ae34b-c71a-17b6-cf3f-84dc1bf44ff0:
-          x: 503
-          'y': 114
+        46fd1307-3181-64e5-2a39-917c353ba163:
+          x: 523
+          'y': 219

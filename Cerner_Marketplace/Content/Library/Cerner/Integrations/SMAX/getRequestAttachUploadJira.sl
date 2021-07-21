@@ -1,8 +1,9 @@
-namespace: Cerner.Integrations.SMAX.subFlows
+namespace: Cerner.Integrations.SMAX
 flow:
-  name: getAttachmentsForRequest
+  name: getRequestAttachUploadJira
   inputs:
     - smaxRequestId
+    - jiraIssueId
   workflow:
     - get_sso_token:
         do:
@@ -20,24 +21,6 @@ flow:
         navigate:
           - FAILURE: on_failure
           - SUCCESS: query_entities
-    - get_attachment:
-        do:
-          io.cloudslang.base.http.http_client_get:
-            - url: 'https://factory-dev.cerner.com/rest/336419949/ces/attachment/cf3244fa-a35a-49f3-a4a1-a5577035e77e'
-            - username: "${get_sp('MarketPlace.smaxIntgUser')}"
-            - password:
-                value: "${get_sp('MarketPlace.smaxIntgUserPass')}"
-                sensitive: true
-            - headers: "${'Cookie: SMAX_AUTH_TOKEN='+sso_token+';TENANTID='+get_sp('MarketPlace.tenantID')}"
-            - content_type: application/json
-        publish:
-          - outFileBinary: '${return_result}'
-          - error_message
-          - return_code
-          - status_code
-        navigate:
-          - SUCCESS: write_to_file
-          - FAILURE: on_failure
     - query_entities:
         do:
           io.cloudslang.microfocus.service_management_automation_x.commons.query_entities:
@@ -54,23 +37,38 @@ flow:
           - jiraRequestResultCount: '${result_count}'
         navigate:
           - FAILURE: on_failure
-          - SUCCESS: get_attachment
+          - SUCCESS: jsonArrayToStringList
           - NO_RESULTS: SUCCESS
-    - write_to_file:
+    - jsonArrayToStringList:
         do:
-          io.cloudslang.base.filesystem.write_to_file:
-            - file_path: /tmp/itsma-vltid__itom-oo-336419949-5fb99d89d9-bbk8w.zip
-            - text: '${outFileBinary}'
-            - encode_type: UTF-8
+          Cerner.Integrations.SMAX.subFlows.jsonArrayToStringList:
+            - entityArray: '${entityJsonArray}'
+        publish:
+          - ids
+          - result
+          - message
         navigate:
-          - SUCCESS: uploadFile
+          - SUCCESS: list_iterator
           - FAILURE: on_failure
-    - uploadFile:
+    - list_iterator:
         do:
-          Cerner.Integrations.SMAX.subFlows.uploadFile: []
+          io.cloudslang.base.lists.list_iterator:
+            - list: '${ids}'
+            - separator: ♪
+        publish:
+          - id: '${result_string}'
         navigate:
-          - SUCCESS: SUCCESS
+          - HAS_MORE: download_Attach_Upload_Jira
+          - NO_MORE: SUCCESS
           - FAILURE: on_failure
+    - download_Attach_Upload_Jira:
+        do:
+          Cerner.Integrations.SMAX.subFlows.download_Attach_Upload_Jira:
+            - idFileName: '${id}'
+            - jiraIssueId: '${jiraIssueId}'
+        navigate:
+          - FAILURE: on_failure
+          - SUCCESS: list_iterator
   outputs:
     - entityJsonArray: '${entityJsonArray}'
     - jiraReqResultCount: '${jiraRequestResultCount}'
@@ -81,30 +79,30 @@ extensions:
   graph:
     steps:
       get_sso_token:
-        x: 79
-        'y': 143
-      get_attachment:
-        x: 282
-        'y': 147
+        x: 44
+        'y': 128
       query_entities:
-        x: 80
-        'y': 354
+        x: 37
+        'y': 459
         navigate:
           bda183ed-3b69-fbc2-5674-6ccd90d600e5:
             targetId: be7401b9-e6fd-9843-1f78-821bc7fe1e1e
             port: NO_RESULTS
-      write_to_file:
-        x: 473
-        'y': 109
-      uploadFile:
-        x: 642
-        'y': 94
+      jsonArrayToStringList:
+        x: 188
+        'y': 308
+      list_iterator:
+        x: 162
+        'y': 107
         navigate:
-          742a8bc6-f4f3-6d24-0f42-a7ac6c9a9a7a:
+          a6f052d2-7e5d-0f00-8429-0afb8c4de874:
             targetId: be7401b9-e6fd-9843-1f78-821bc7fe1e1e
-            port: SUCCESS
+            port: NO_MORE
+      download_Attach_Upload_Jira:
+        x: 498
+        'y': 109
     results:
       SUCCESS:
         be7401b9-e6fd-9843-1f78-821bc7fe1e1e:
-          x: 645
-          'y': 355
+          x: 619
+          'y': 450
