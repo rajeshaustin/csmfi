@@ -57,10 +57,19 @@ flow:
           - SUCCESS: uploadFileToJira
           - FAILURE: on_failure
     - uploadFileToJira:
+        worker_group: RAS_file_download
         do:
           Cerner.Integrations.SMAX.subFlows.uploadFileToJira:
             - filepath: "${'/tmp/'+fileName}"
             - jiraIssueId: '${jiraIssueId}'
+        navigate:
+          - SUCCESS: run_command
+          - FAILURE: on_failure
+    - run_command:
+        worker_group: RAS_file_download
+        do:
+          io.cloudslang.base.cmd.run_command:
+            - command: "${'rm /tmp/'+fileName}"
         navigate:
           - SUCCESS: SUCCESS
           - FAILURE: on_failure
@@ -83,10 +92,13 @@ extensions:
         x: 405
         'y': 101
       uploadFileToJira:
-        x: 410
-        'y': 367
+        x: 412
+        'y': 369
+      run_command:
+        x: 590
+        'y': 358
         navigate:
-          11594380-866f-9062-d6cd-9187baf6cc5c:
+          6ab38f8c-8357-ba9d-628c-6341d2fe704d:
             targetId: 9b09ee02-16b6-3995-8fce-2d9932c91881
             port: SUCCESS
     results:

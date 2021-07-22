@@ -115,7 +115,15 @@ flow:
         publish: []
         navigate:
           - FAILURE: on_failure
+          - SUCCESS: getRequestAttachUploadJira
+    - getRequestAttachUploadJira:
+        do:
+          Cerner.Integrations.SMAX.getRequestAttachUploadJira:
+            - smaxRequestId: '${smaxRequestID}'
+            - jiraIssueId: '${jiraIssueId}'
+        navigate:
           - SUCCESS: SUCCESS
+          - FAILURE: on_failure
   outputs:
     - incidentCreationCode: '${incidentHttpStatusCode}'
     - incidentCreationResultJSON: '${jiraIncidentCreationResult}'
@@ -127,15 +135,9 @@ flow:
 extensions:
   graph:
     steps:
-      extractJiraUser:
-        x: 133
-        'y': 128
       get_priorityId:
-        x: 915
+        x: 914
         'y': 121
-      http_client_post:
-        x: 926
-        'y': 284
       get_value:
         x: 921
         'y': 456
@@ -145,16 +147,25 @@ extensions:
       extractJiraUser_2:
         x: 673
         'y': 121
+      getRequestAttachUploadJira:
+        x: 317
+        'y': 285
+        navigate:
+          fe22cd88-2ee0-30e8-d506-a369c6cb8e22:
+            targetId: 2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c
+            port: SUCCESS
+      updateSMAXRequest:
+        x: 400
+        'y': 467
+      extractJiraUser:
+        x: 133
+        'y': 129
       get_value_2:
         x: 618
         'y': 458
-      updateSMAXRequest:
-        x: 401
-        'y': 447
-        navigate:
-          c7de86bc-44a6-5185-bc07-0daa29cad3ef:
-            targetId: 2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c
-            port: SUCCESS
+      http_client_post:
+        x: 922
+        'y': 287
     results:
       SUCCESS:
         2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c:

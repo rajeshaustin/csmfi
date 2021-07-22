@@ -1,6 +1,6 @@
 namespace: Cerner.Integrations.Jira
 flow:
-  name: Create_Artifactory_Incident
+  name: Create_JiraIncident_Artifactory
   inputs:
     - projectId: '40703'
     - issueTypeId: '46'
@@ -19,23 +19,29 @@ flow:
     - repoURL:
         default: ' '
         required: false
-    - jiraToolInstance
-    - watcher1:
-        required: false
-    - watcher2:
-        required: false
-    - watcher3:
-        required: false
+    - jiraToolInstances
+    - watchers
     - smaxRequestID
   workflow:
-    - extractJiraUser:
+    - extractArtifactoryInstance:
         do:
-          Cerner.Integrations.Jira.subFlows.extractJiraUser:
-            - inpString: '${watcher1}'
+          Cerner.Integrations.Jira.subFlows.extractArtifactoryInstance:
+            - artifactoryIds: '${jiraToolInstances}'
         publish:
-          - watcher1: '${outString}'
+          - result
+          - artifactoryInstanceJSON: '${message}'
         navigate:
-          - SUCCESS: extractJiraUser_1
+          - SUCCESS: extractWathersList
+          - FAILURE: on_failure
+    - extractWathersList:
+        do:
+          Cerner.Integrations.Jira.subFlows.extractWathersList:
+            - watchers: '${watchers}'
+        publish:
+          - result
+          - watchersJSON: '${message}'
+        navigate:
+          - SUCCESS: get_priorityId
           - FAILURE: on_failure
     - get_priorityId:
         do:
@@ -57,18 +63,18 @@ flow:
                 value: "${get_sp('MarketPlace.jiraPassword')}"
                 sensitive: true
             - tls_version: TLSv1.2
-            - body: "${'{    \"fields\": {         \"project\": { \"id\": \"'+projectId+'\" }, \"summary\": \"'+summary+'\", \"issuetype\": { \"id\": \"'+issueTypeId+'\"}, \"reporter\": { \"name\": \"'+reporter[0:reporter.find(\"@\")]+'\"}, \"priority\": { \"id\": \"'+jiraPriorityId+'\" }, \"customfield_47251\": \"'+criticalityJustification+'\",\"description\": \"'+description+'\", \"'+jiraToolFieldId+'\":{ \"id\": \"'+jiraTool+'\" }, \"'+repoURLFieldId+'\": \"'+repoURL+'\", \"'+toolInstanceFieldId+'\": [{ \"id\": \"'+jiraToolInstance+'\"}], \"'+watcherFieldId+'\": [{\"name\": \"'+watcher1+'\"}, {\"name\": \"'+watcher2+'\"},{\"name\": \"'+watcher3+'\"}]  } }'}"
+            - body: "${'{    \"fields\": {         \"project\": { \"id\": \"'+projectId+'\" }, \"summary\": \"'+summary+'\", \"issuetype\": { \"id\": \"'+issueTypeId+'\"}, \"reporter\": { \"name\": \"'+reporter[0:reporter.find(\"@\")]+'\"}, \"priority\": { \"id\": \"'+jiraPriorityId+'\" }, \"customfield_47251\": \"'+criticalityJustification+'\",\"description\": \"'+description+'\", \"'+jiraToolFieldId+'\":{ \"id\": \"'+jiraTool+'\" }, \"'+repoURLFieldId+'\": \"'+repoURL+'\", \"'+toolInstanceFieldId+'\": ['+artifactoryInstanceJSON+'], \"'+watcherFieldId+'\": ['+watchersJSON+']  } }'}"
             - content_type: application/json
         publish:
           - jiraIncidentCreationResult: '${return_result}'
-          - error_message
+          - jiraInstanceIdJSON: '${error_message}'
           - return_code
           - response_headers
           - incidentHttpStatusCode: '${status_code}'
         navigate:
-          - SUCCESS: get_value
+          - SUCCESS: get_jira_url
           - FAILURE: on_failure
-    - get_value:
+    - get_jira_url:
         do:
           io.cloudslang.base.json.get_value:
             - json_input: '${jiraIncidentCreationResult}'
@@ -76,27 +82,9 @@ flow:
         publish:
           - jiraIssueURL: "${get_sp('MarketPlace.jiraIssueURL')+'browse/'+return_result}"
         navigate:
-          - SUCCESS: get_value_2
+          - SUCCESS: get_jira_issueid
           - FAILURE: on_failure
-    - extractJiraUser_1:
-        do:
-          Cerner.Integrations.Jira.subFlows.extractJiraUser:
-            - inpString: '${watcher2}'
-        publish:
-          - watcher2: '${outString}'
-        navigate:
-          - SUCCESS: extractJiraUser_2
-          - FAILURE: on_failure
-    - extractJiraUser_2:
-        do:
-          Cerner.Integrations.Jira.subFlows.extractJiraUser:
-            - inpString: '${watcher3}'
-        publish:
-          - watcher3: '${outString}'
-        navigate:
-          - SUCCESS: get_priorityId
-          - FAILURE: on_failure
-    - get_value_2:
+    - get_jira_issueid:
         do:
           io.cloudslang.base.json.get_value:
             - json_input: '${jiraIncidentCreationResult}'
@@ -135,39 +123,36 @@ flow:
 extensions:
   graph:
     steps:
+      extractArtifactoryInstance:
+        x: 270
+        'y': 116
+      extractWathersList:
+        x: 498
+        'y': 115
       get_priorityId:
-        x: 915
-        'y': 121
-      get_value:
+        x: 713
+        'y': 113
+      http_client_post:
+        x: 918
+        'y': 109
+      get_jira_url:
         x: 921
         'y': 456
-      extractJiraUser_1:
-        x: 400
-        'y': 125
-      extractJiraUser_2:
-        x: 673
-        'y': 121
+      get_jira_issueid:
+        x: 723
+        'y': 454
+      updateSMAXRequest:
+        x: 531
+        'y': 453
       getRequestAttachUploadJira:
-        x: 325
-        'y': 266
+        x: 283
+        'y': 454
         navigate:
-          b3d23785-4153-4f3e-4dcf-afc9119ed9f9:
+          fe22cd88-2ee0-30e8-d506-a369c6cb8e22:
             targetId: 2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c
             port: SUCCESS
-      updateSMAXRequest:
-        x: 401
-        'y': 447
-      extractJiraUser:
-        x: 133
-        'y': 128
-      get_value_2:
-        x: 618
-        'y': 458
-      http_client_post:
-        x: 927
-        'y': 285
     results:
       SUCCESS:
         2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c:
-          x: 181
-          'y': 448
+          x: 598
+          'y': 286

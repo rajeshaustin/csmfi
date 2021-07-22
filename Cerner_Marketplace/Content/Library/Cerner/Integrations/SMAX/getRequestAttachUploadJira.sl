@@ -47,10 +47,12 @@ flow:
           - ids
           - result
           - message
+          - listSize
         navigate:
-          - SUCCESS: list_iterator
+          - SUCCESS: is_list_empty
           - FAILURE: on_failure
     - list_iterator:
+        worker_group: RAS_file_download
         do:
           io.cloudslang.base.lists.list_iterator:
             - list: '${ids}'
@@ -62,6 +64,7 @@ flow:
           - NO_MORE: SUCCESS
           - FAILURE: on_failure
     - download_Attach_Upload_Jira:
+        worker_group: RAS_file_download
         do:
           Cerner.Integrations.SMAX.subFlows.download_Attach_Upload_Jira:
             - idFileName: '${id}'
@@ -69,6 +72,15 @@ flow:
         navigate:
           - FAILURE: on_failure
           - SUCCESS: list_iterator
+    - is_list_empty:
+        do:
+          io.cloudslang.base.strings.string_equals:
+            - first_string: '${listSize}'
+            - second_string: '0'
+        publish: []
+        navigate:
+          - SUCCESS: SUCCESS
+          - FAILURE: list_iterator
   outputs:
     - entityJsonArray: '${entityJsonArray}'
     - jiraReqResultCount: '${jiraRequestResultCount}'
@@ -89,18 +101,25 @@ extensions:
             targetId: be7401b9-e6fd-9843-1f78-821bc7fe1e1e
             port: NO_RESULTS
       jsonArrayToStringList:
-        x: 188
-        'y': 308
+        x: 187
+        'y': 310
       list_iterator:
-        x: 162
-        'y': 107
+        x: 435
+        'y': 96
         navigate:
           a6f052d2-7e5d-0f00-8429-0afb8c4de874:
             targetId: be7401b9-e6fd-9843-1f78-821bc7fe1e1e
             port: NO_MORE
       download_Attach_Upload_Jira:
-        x: 498
-        'y': 109
+        x: 656
+        'y': 102
+      is_list_empty:
+        x: 205
+        'y': 102
+        navigate:
+          1a26bec7-3073-7210-853a-4af083c8318a:
+            targetId: be7401b9-e6fd-9843-1f78-821bc7fe1e1e
+            port: SUCCESS
     results:
       SUCCESS:
         be7401b9-e6fd-9843-1f78-821bc7fe1e1e:
