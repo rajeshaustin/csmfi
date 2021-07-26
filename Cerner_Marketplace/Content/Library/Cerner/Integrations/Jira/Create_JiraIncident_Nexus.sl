@@ -15,11 +15,7 @@ flow:
     - toolInstanceFieldId: customfield_47215
     - watcherFieldId: customfield_22411
     - summary
-    - jiraTool: '70856'
-    - repoURL:
-        default: ' '
-        required: false
-    - jiraToolInstances
+    - jiraTool: '70839'
     - watchers
     - smaxRequestID
   workflow:
@@ -113,13 +109,6 @@ flow:
 extensions:
   graph:
     steps:
-      getRequestAttachUploadJira:
-        x: 284
-        'y': 453
-        navigate:
-          fe22cd88-2ee0-30e8-d506-a369c6cb8e22:
-            targetId: 2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c
-            port: SUCCESS
       extractWathersList:
         x: 499
         'y': 116
@@ -138,6 +127,13 @@ extensions:
       updateSMAXRequest:
         x: 531
         'y': 453
+      getRequestAttachUploadJira:
+        x: 284
+        'y': 453
+        navigate:
+          fe22cd88-2ee0-30e8-d506-a369c6cb8e22:
+            targetId: 2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c
+            port: SUCCESS
     results:
       SUCCESS:
         2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c:
