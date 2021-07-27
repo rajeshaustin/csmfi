@@ -118,13 +118,6 @@ flow:
 extensions:
   graph:
     steps:
-      getRequestAttachUploadJira:
-        x: 283
-        'y': 454
-        navigate:
-          fe22cd88-2ee0-30e8-d506-a369c6cb8e22:
-            targetId: 2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c
-            port: SUCCESS
       extractWathersList:
         x: 157
         'y': 117
@@ -133,7 +126,7 @@ extensions:
         'y': 116
       http_client_post:
         x: 918
-        'y': 109
+        'y': 110
       get_jira_url:
         x: 921
         'y': 456
@@ -143,6 +136,13 @@ extensions:
       updateSMAXRequest:
         x: 531
         'y': 453
+      getRequestAttachUploadJira:
+        x: 283
+        'y': 454
+        navigate:
+          fe22cd88-2ee0-30e8-d506-a369c6cb8e22:
+            targetId: 2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c
+            port: SUCCESS
     results:
       SUCCESS:
         2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c:
