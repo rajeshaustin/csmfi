@@ -1,24 +1,32 @@
 namespace: Cerner.Integrations.Jira
 flow:
-  name: Create_JiraIncident_Nexus
+  name: Create_JiraRequest_Artifactory
   inputs:
+    - jiraToolRequestFieldId: customfield_47005
+    - swLinkFieldId: customfield_47216
+    - criticalJustFieldId: customfield_47251
+    - watcherFieldId: customfield_22411
+    - artfactReqTypeFieldId: customfield_47218
+    - swExistInNexusFieldId: customfield_47219
     - projectId: '40703'
-    - issueTypeId: '46'
+    - issueTypeId: '18'
+    - jiraToolRequest: '70879'
     - reporter
     - priority
     - criticalityJustification:
         default: ' '
         required: false
-    - description
-    - jiraToolFieldId: customfield_47004
-    - repoURLFieldId: customfield_47216
-    - toolInstanceFieldId: customfield_47215
-    - watcherFieldId: customfield_22411
+    - artifactoryRequestType
     - summary
-    - jiraTool: '70839'
+    - description
+    - swLink:
+        default: ' '
+        required: false
     - watchers:
         required: false
     - smaxRequestID
+    - swExistInNexus:
+        required: false
   workflow:
     - extractWathersList:
         do:
@@ -50,7 +58,7 @@ flow:
                 value: "${get_sp('MarketPlace.jiraPassword')}"
                 sensitive: true
             - tls_version: TLSv1.2
-            - body: "${'{    \"fields\": {         \"project\": { \"id\": \"'+projectId+'\" }, \"summary\": \"'+summary+'\", \"issuetype\": { \"id\": \"'+issueTypeId+'\"}, \"reporter\": { \"name\": \"'+reporter[0:reporter.find(\"@\")]+'\"}, \"priority\": { \"id\": \"'+jiraPriorityId+'\" }, \"customfield_47251\": \"'+criticalityJustification+'\",\"description\": \"'+description+'\", \"'+jiraToolFieldId+'\":{ \"id\": \"'+jiraTool+'\" }, \"'+watcherFieldId+'\": ['+watchersJSON+']  } }'}"
+            - body: "${'{    \"fields\": {         \"project\": { \"id\": \"'+projectId+'\" }, \"summary\": \"'+summary+'\", \"issuetype\": { \"id\": \"'+issueTypeId+'\"}, \"reporter\": { \"name\": \"'+reporter[0:reporter.find(\"@\")]+'\"}, \"priority\": { \"id\": \"'+jiraPriorityId+'\" }, \"'+criticalJustFieldId+'\": \"'+criticalityJustification+'\",\"description\": \"'+description+'\", \"'+jiraToolRequestFieldId+'\":{ \"id\": \"'+jiraToolRequest+'\" }, \"'+swLinkFieldId+'\": \"'+swLink+'\", \"'+artfactReqTypeFieldId+'\": { \"id\": '+artifactoryRequestType+'}, \"'+swExistInNexusFieldId+'\": { \"id\": '+swExistInNexus+'}, \"'+watcherFieldId+'\": ['+watchersJSON+']  } }'}"
             - content_type: application/json
         publish:
           - jiraIncidentCreationResult: '${return_result}'
@@ -110,33 +118,33 @@ flow:
 extensions:
   graph:
     steps:
+      getRequestAttachUploadJira:
+        x: 283
+        'y': 454
+        navigate:
+          fe22cd88-2ee0-30e8-d506-a369c6cb8e22:
+            targetId: 2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c
+            port: SUCCESS
       extractWathersList:
-        x: 499
-        'y': 116
+        x: 157
+        'y': 117
       get_priorityId:
-        x: 713
-        'y': 113
+        x: 476
+        'y': 116
       http_client_post:
-        x: 921
-        'y': 112
+        x: 918
+        'y': 109
       get_jira_url:
-        x: 920
-        'y': 457
+        x: 921
+        'y': 456
       get_jira_issueid:
         x: 723
         'y': 454
       updateSMAXRequest:
         x: 531
         'y': 453
-      getRequestAttachUploadJira:
-        x: 284
-        'y': 453
-        navigate:
-          fe22cd88-2ee0-30e8-d506-a369c6cb8e22:
-            targetId: 2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c
-            port: SUCCESS
     results:
       SUCCESS:
         2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c:
-          x: 568
-          'y': 307
+          x: 598
+          'y': 286
