@@ -1,10 +1,10 @@
 namespace: Cerner.Integrations.CernerStatusDashboard
 flow:
-  name: Extract_CSDEvents_X_Load_KM
+  name: Extract_CSDIncident_X_Load_KM
   workflow:
-    - Get_CSD_Events_Upload_to_KM:
+    - Get_CSD_Incidents_Upload_to_KM:
         do:
-          Cerner.Integrations.CernerStatusDashboard.Get_CSD_Events_Upload_to_KM: []
+          Cerner.Integrations.CernerStatusDashboard.Get_CSD_Incidents_Upload_to_KM: []
         navigate:
           - SUCCESS: SUCCESS
           - FAILURE: on_failure
@@ -13,16 +13,16 @@ flow:
     - message
     - jresult
   results:
-    - FAILURE
     - SUCCESS
+    - FAILURE
 extensions:
   graph:
     steps:
-      Get_CSD_Events_Upload_to_KM:
-        x: 243
-        'y': 104
+      Get_CSD_Incidents_Upload_to_KM:
+        x: 233
+        'y': 105.46665954589844
         navigate:
-          5d5cc958-86c9-ceb7-58de-318424a096ff:
+          83f08184-f9de-4d60-cfaf-9f3d7f816fd5:
             targetId: 8d73c523-806f-58aa-423a-8864b7fd60dc
             port: SUCCESS
     results:

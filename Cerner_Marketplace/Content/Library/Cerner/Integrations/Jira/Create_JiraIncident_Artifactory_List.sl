@@ -146,8 +146,8 @@ extensions:
         x: 713
         'y': 113
       http_client_post:
-        x: 920
-        'y': 110
+        x: 919
+        'y': 109
       get_jira_url:
         x: 921
         'y': 456
