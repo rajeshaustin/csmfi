@@ -94,7 +94,7 @@ extensions:
         x: 44
         'y': 128
       query_entities:
-        x: 37
+        x: 38
         'y': 459
         navigate:
           bda183ed-3b69-fbc2-5674-6ccd90d600e5:

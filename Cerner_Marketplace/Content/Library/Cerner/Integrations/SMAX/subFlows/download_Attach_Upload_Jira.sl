@@ -81,19 +81,19 @@ extensions:
     steps:
       get_filename_attachid:
         x: 57
-        'y': 387
+        'y': 388
       get_sso_token:
         x: 53
         'y': 107
       download_file:
-        x: 224
+        x: 223
         'y': 103
       validate_download:
         x: 405
-        'y': 101
+        'y': 102
       uploadFileToJira:
         x: 412
-        'y': 369
+        'y': 368
       run_command:
         x: 590
         'y': 358

@@ -45,7 +45,7 @@ extensions:
   graph:
     steps:
       get_sso_token:
-        x: 85
+        x: 84
         'y': 174
       download_file:
         x: 217
