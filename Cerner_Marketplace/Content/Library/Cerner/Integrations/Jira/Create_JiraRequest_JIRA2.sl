@@ -3,33 +3,42 @@ flow:
   name: Create_JiraRequest_JIRA2
   inputs:
     - projectId: '40703'
-    - issueTypeId: '46'
+    - issueTypeId: '18'
     - reporter
     - priority
     - criticalityJustification:
         default: ' '
         required: false
     - description
-    - jiraToolFieldId: customfield_47004
-    - repoURLFieldId: customfield_47216
-    - toolInstanceFieldId: customfield_47215
+    - jiraToolFieldId:
+        default: customfield_47004
+        required: false
+    - repoURLFieldId:
+        default: customfield_47216
+        required: false
+    - toolInstanceFieldId:
+        default: customfield_47215
+        required: false
     - watcherFieldId:
         default: customfield_22411
         required: false
     - summary
     - jiraTool:
-        default: '70856'
+        default: '70704'
         required: true
     - repoURL:
         default: ' '
         required: false
     - jiraToolInstances:
+        default: '71909'
         required: false
     - watchers:
         required: false
     - smaxRequestID
     - JiraInstance
     - JiraProject:
+        required: false
+    - Justification:
         required: false
   workflow:
     - extractWathersList:
@@ -45,7 +54,7 @@ flow:
     - get_priorityId:
         do:
           io.cloudslang.base.json.get_value:
-            - json_input: "${get_sp('MarketPlace.priorityIDs')}"
+            - json_input: "get_sp('MarketPlace.priorityIDs')"
             - json_path: '${priority}'
         publish:
           - jiraPriorityId: '${return_result}'
@@ -62,7 +71,7 @@ flow:
                 value: "${get_sp('MarketPlace.jiraPassword')}"
                 sensitive: true
             - tls_version: TLSv1.2
-            - body: "${'{    \"fields\": {         \"project\": { \"id\": \"'+projectId+'\" }, \"summary\": \"'+summary+'\", \"issuetype\": { \"id\": \"'+issueTypeId+'\"}, \"reporter\": { \"name\": \"'+reporter[0:reporter.find(\"@\")]+'\"}, \"priority\": { \"id\": \"'+jiraPriorityId+'\" }, \"customfield_47251\": \"'+criticalityJustification+'\",\"description\": \"'+description+'\", \"'+jiraToolFieldId+'\":{ \"id\": \"'+jiraTool+'\" }, \"'+watcherFieldId+'\": ['+watchersJSON+'] ,\"customfield_47247\": \"'+JIRAInstance+'\" , \"customfield_47248\" : \"'+JIRAProject+'\" } }'}"
+            - body: "${'{    \"fields\": {         \"project\": { \"id\": \"'+projectId+'\" }, \"summary\": \"'+summary+'\", \"issuetype\": { \"id\": \"'+issueTypeId+'\"}, \"reporter\": { \"name\": \"'+reporter[0:reporter.find(\"@\")]+'\"}, \"priority\": { \"id\": \"'+jiraPriorityId+'\" }, \"customfield_47251\": \"'+criticalityJustification+'\",\"description\": \"'+description+'\", \"'+jiraToolFieldId+'\":{ \"id\": \"'+jiraTool+'\" }, \"'+watcherFieldId+'\": ['+watchersJSON+'] ,\"customfield_47247\": \"'+JIRAInstance+'\" , \"customfield_47248\" : \"'+JIRAProject+'\", \"customfield_47637\" : \"'+Justification+'\" } }'}"
             - content_type: application/json
         publish:
           - jiraIncidentCreationResult: '${return_result}'
