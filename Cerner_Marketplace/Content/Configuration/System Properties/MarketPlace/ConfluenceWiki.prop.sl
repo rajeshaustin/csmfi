@@ -1,7 +1,7 @@
 namespace: MarketPlace
 properties:
   - confluenceTag: marketplace_faqs
-  - confluenceURL: 'https://wikicrt.cerner.com'
+  - confluenceURL: 'https://wiki.cerner.com'
   - confluenceUser: svcdfappsup
   - confluencePassword:
       value: Vxak9JyS
