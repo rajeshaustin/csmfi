@@ -30,6 +30,8 @@ flow:
         default: ' '
         required: false
     - deleteFileFolderLink:
+        prompt:
+          type: text
         required: false
     - restoreArtifactName:
         required: false
@@ -217,7 +219,7 @@ extensions:
             targetId: 553ef829-1fc1-c109-9bb2-9238e57b896d
             port: SUCCESS
       get_artifactoryRequestType:
-        x: 268
+        x: 267
         'y': 121
       get_SWExistsInNexus:
         x: 387
@@ -226,11 +228,11 @@ extensions:
         x: 101
         'y': 323
       formatDescriptionForArtReqType:
-        x: 86
-        'y': 121
+        x: 85
+        'y': 123
       http_client_post:
         x: 948
-        'y': 319
+        'y': 321
     results:
       SUCCESS:
         553ef829-1fc1-c109-9bb2-9238e57b896d:
