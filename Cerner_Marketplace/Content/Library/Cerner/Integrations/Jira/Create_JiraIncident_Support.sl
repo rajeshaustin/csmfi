@@ -39,7 +39,7 @@ flow:
         publish:
           - jiraPriorityId: '${return_result}'
         navigate:
-          - SUCCESS: http_client_post
+          - SUCCESS: get_jiraInstanceId
           - FAILURE: on_failure
     - http_client_post:
         do:
@@ -100,6 +100,16 @@ flow:
         navigate:
           - SUCCESS: SUCCESS
           - FAILURE: on_failure
+    - get_jiraInstanceId:
+        do:
+          io.cloudslang.base.json.get_value:
+            - json_input: "${get_sp('MarketPlace.JIRAInstanceIDs')}"
+            - json_path: '${JiraInstance}'
+        publish:
+          - jiraPriorityId: '${return_result}'
+        navigate:
+          - SUCCESS: http_client_post
+          - FAILURE: on_failure
   outputs:
     - incidentCreationCode: '${incidentHttpStatusCode}'
     - incidentCreationResultJSON: '${jiraIncidentCreationResult}'
@@ -136,6 +146,9 @@ extensions:
           fe22cd88-2ee0-30e8-d506-a369c6cb8e22:
             targetId: 2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c
             port: SUCCESS
+      get_jiraInstanceId:
+        x: 822
+        'y': 239
     results:
       SUCCESS:
         2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c:
