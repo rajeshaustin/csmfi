@@ -217,8 +217,8 @@ extensions:
             targetId: 553ef829-1fc1-c109-9bb2-9238e57b896d
             port: SUCCESS
       get_artifactoryRequestType:
-        x: 268
-        'y': 121
+        x: 270
+        'y': 122
       get_SWExistsInNexus:
         x: 387
         'y': 1
@@ -226,8 +226,8 @@ extensions:
         x: 101
         'y': 323
       formatDescriptionForArtReqType:
-        x: 86
-        'y': 121
+        x: 85
+        'y': 126
       http_client_post:
         x: 948
         'y': 319
