@@ -24,7 +24,7 @@ flow:
     - JIRAProject:
         required: false
     - Justification:
-        default: '    '
+        default: '                        '
         required: false
   workflow:
     - extractWathersList:
