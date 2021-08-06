@@ -4,6 +4,7 @@ flow:
   inputs:
     - projectId: '40703'
     - issueTypeId: '18'
+    - ToolRequest: '70704'
     - reporter
     - priority
     - criticalityJustification:
@@ -21,7 +22,6 @@ flow:
     - JiraProject
     - Justification:
         required: false
-    - ToolRequest: '70704'
   workflow:
     - extractWathersList:
         do:
