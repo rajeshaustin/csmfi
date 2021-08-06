@@ -13,9 +13,18 @@ flow:
     - jiraToolFieldId: customfield_47004
     - repoURLFieldId: customfield_47216
     - toolInstanceFieldId: customfield_47215
-    - watcherFieldId: customfield_22411
+    - watcherFieldId:
+        default: customfield_22411
+        required: false
     - summary
-    - jiraTool: '70839'
+    - jiraTool:
+        default: '70856'
+        required: true
+    - repoURL:
+        default: ' '
+        required: false
+    - jiraToolInstances:
+        required: false
     - watchers:
         required: false
     - smaxRequestID

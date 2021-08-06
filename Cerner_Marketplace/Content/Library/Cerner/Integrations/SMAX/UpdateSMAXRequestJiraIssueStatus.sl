@@ -54,8 +54,8 @@ extensions:
   graph:
     steps:
       getJiraRequestsForStatusUpdate:
-        x: 121
-        'y': 71
+        x: 120
+        'y': 73
         navigate:
           12a8a614-8980-c30e-7095-5bc208672e37:
             targetId: 44cc71e0-1f9f-780d-42c1-c882584be35e
