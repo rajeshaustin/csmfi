@@ -51,10 +51,10 @@ flow:
                 value: "${get_sp('MarketPlace.jiraPassword')}"
                 sensitive: true
             - tls_version: TLSv1.2
-            - body: "${'{    \"fields\": {         \"project\": { \"id\": \"'+projectId+'\" }, \"summary\": \"'+summary+'\", \"issuetype\": { \"id\": \"'+issueTypeId+'\"}, \"reporter\": { \"name\": \"'+reporter[0:reporter.find(\"@\")]+'\"}, \"priority\": { \"id\": \"'+jiraPriorityId+'\" }, \"customfield_47251\": \"'+criticalityJustification+'\",\"description\": \"'+description+'\", \"customfield_47004\":{ \"id\": \"'+ToolRequest+'\" },\"customfield_47247\": {\"value\":\"'+JiraInstance+'\"},\"customfield_47248\": \"'+JiraProject+'\"} }'}"
+            - body: "${'{    \"fields\": {         \"project\": { \"id\": \"'+projectId+'\" }, \"summary\": \"'+summary+'\", \"issuetype\": { \"id\": \"'+issueTypeId+'\"}, \"reporter\": { \"name\": \"'+reporter[0:reporter.find(\"@\")]+'\"}, \"priority\": { \"id\": \"'+jiraPriorityId+'\" }, \"customfield_47251\": \"'+criticalityJustification+'\",\"description\": \"'+description+'\", \"customfield_47004\":{ \"id\": \"'+ToolRequest+'\" },\"customfield_47247\": {\"value\":\"'+JiraInstanceId+'\"},\"customfield_47248\": \"'+JiraProject+'\"} }'}"
             - content_type: application/json
         publish:
-          - jiraIncidentCreationResult: '${return_result}'
+          - jiraPriorityId: '${return_result}'
           - jiraInstanceIdJSON: '${error_message}'
           - return_code
           - response_headers
@@ -106,7 +106,7 @@ flow:
             - json_input: "${get_sp('MarketPlace.JIRAInstanceIDs')}"
             - json_path: '${JiraInstance}'
         publish:
-          - jiraPriorityId: '${return_result}'
+          - JiraInstanceId: '${return_result}'
         navigate:
           - SUCCESS: http_client_post
           - FAILURE: on_failure
@@ -123,12 +123,12 @@ extensions:
     steps:
       extractWathersList:
         x: 499
-        'y': 116
+        'y': 115
       get_priorityId:
-        x: 713
-        'y': 113
+        x: 714
+        'y': 115
       http_client_post:
-        x: 921
+        x: 920
         'y': 112
       get_jira_url:
         x: 920
