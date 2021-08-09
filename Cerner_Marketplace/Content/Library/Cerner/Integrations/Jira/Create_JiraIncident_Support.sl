@@ -51,10 +51,10 @@ flow:
                 value: "${get_sp('MarketPlace.jiraPassword')}"
                 sensitive: true
             - tls_version: TLSv1.2
-            - body: "${'{    \"fields\": {         \"project\": { \"id\": \"'+projectId+'\" }, \"summary\": \"'+summary+'\", \"issuetype\": { \"id\": \"'+issueTypeId+'\"}, \"reporter\": { \"name\": \"'+reporter[0:reporter.find(\"@\")]+'\"}, \"priority\": { \"id\": \"'+jiraPriorityId+'\" }, \"customfield_47251\": \"'+criticalityJustification+'\",\"description\": \"'+description+'\", \"customfield_47004\":{ \"id\": \"'+ToolRequest+'\" },\"customfield_47247\": {\"Id\":\"'+JiraInstanceId+'\"},\"customfield_47248\": \"'+JiraProject+'\"} }'}"
+            - body: "${'{    \"fields\": {         \"project\": { \"id\": \"'+projectId+'\" }, \"summary\": \"'+summary+'\", \"issuetype\": { \"id\": \"'+issueTypeId+'\"}, \"reporter\": { \"name\": \"'+reporter[0:reporter.find(\"@\")]+'\"}, \"priority\": { \"id\": \"'+jiraPriorityId+'\" }, \"customfield_47251\": \"'+criticalityJustification+'\",\"description\": \"'+description+'\", \"customfield_47004\":{ \"id\": \"'+ToolRequest+'\" },\"customfield_47247\": {\"id\":\"'+JiraInstanceId+'\"},\"customfield_47248\": \"'+JiraProject+'\"} }'}"
             - content_type: application/json
         publish:
-          - jiraPriorityId: '${return_result}'
+          - jiraIncidentCreationResult: '${return_result}'
           - jiraInstanceIdJSON: '${error_message}'
           - return_code
           - response_headers
@@ -68,7 +68,7 @@ flow:
             - json_input: '${jiraIncidentCreationResult}'
             - json_path: key
         publish:
-          - jiraIssueURL: "${get_sp('MarketPlace.jiraIssueURL')+'browse/'+return_result}"
+          - jiraPriorityId: "${get_sp('MarketPlace.jiraIssueURL')+'browse/'+return_result}"
         navigate:
           - SUCCESS: get_jira_issueid
           - FAILURE: on_failure
@@ -78,7 +78,7 @@ flow:
             - json_input: '${jiraIncidentCreationResult}'
             - json_path: id
         publish:
-          - jiraIssueId: '${return_result}'
+          - jiraPriorityId: '${return_result}'
         navigate:
           - SUCCESS: updateSMAXRequest
           - FAILURE: on_failure
@@ -128,19 +128,19 @@ extensions:
         x: 714
         'y': 116
       http_client_post:
-        x: 920
-        'y': 112
+        x: 921
+        'y': 113
       get_jira_url:
-        x: 920
+        x: 924
         'y': 457
       get_jira_issueid:
         x: 723
         'y': 454
       updateSMAXRequest:
         x: 531
-        'y': 453
+        'y': 455
       getRequestAttachUploadJira:
-        x: 284
+        x: 283
         'y': 453
         navigate:
           fe22cd88-2ee0-30e8-d506-a369c6cb8e22:
@@ -148,7 +148,7 @@ extensions:
             port: SUCCESS
       get_jiraInstanceId:
         x: 822
-        'y': 239
+        'y': 241
     results:
       SUCCESS:
         2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c:
