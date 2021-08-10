@@ -51,7 +51,7 @@ flow:
                 value: "${get_sp('MarketPlace.jiraPassword')}"
                 sensitive: true
             - tls_version: TLSv1.2
-            - body: "${'{    \"fields\": {         \"project\": { \"id\": \"'+projectId+'\" }, \"summary\": \"'+summary+'\", \"issuetype\": { \"id\": \"'+issueTypeId+'\"}, \"reporter\": { \"name\": \"'+reporter[0:reporter.find(\"@\")]+'\"}, \"priority\": { \"id\": \"'+jiraPriorityId+'\" }, \"customfield_47251\": \"'+criticalityJustification+'\",\"description\": \"'+description+'\", \"customfield_47004\":{ \"id\": \"'+ToolRequest+'\" },\"customfield_47247\": {\"value\":\"'+JiraInstance+'\"},\"customfield_47248\": \"'+JiraProject+'\"} }'}"
+            - body: "${'{    \"fields\": {         \"project\": { \"id\": \"'+projectId+'\" }, \"summary\": \"'+summary+'\", \"issuetype\": { \"id\": \"'+issueTypeId+'\"}, \"reporter\": { \"name\": \"'+reporter[0:reporter.find(\"@\")]+'\"}, \"priority\": { \"id\": \"'+jiraPriorityId+'\" }, \"customfield_47251\": \"'+criticalityJustification+'\",\"description\": \"'+description+'\", \"customfield_47004\":{ \"id\": \"'+ToolRequest+'\" },\"customfield_47247\": {\"id\":\"'+jiraPriorityId+'\"},\"customfield_47248\": \"'+JiraProject+'\"} }'}"
             - content_type: application/json
         publish:
           - jiraIncidentCreationResult: '${return_result}'
@@ -60,9 +60,19 @@ flow:
           - response_headers
           - incidentHttpStatusCode: '${status_code}'
         navigate:
-          - SUCCESS: get_jira_url
+          - SUCCESS: get_jira_url_1
           - FAILURE: on_failure
-    - get_jira_url:
+    - get_jiraInstanceId:
+        do:
+          io.cloudslang.base.json.get_value:
+            - json_input: "${get_sp('MarketPlace.JIRAInstanceIDs')}"
+            - json_path: '${JiraInstance}'
+        publish:
+          - jiraPriorityId: '${return_result}'
+        navigate:
+          - SUCCESS: http_client_post
+          - FAILURE: on_failure
+    - get_jira_url_1:
         do:
           io.cloudslang.base.json.get_value:
             - json_input: '${jiraIncidentCreationResult}'
@@ -100,16 +110,6 @@ flow:
         navigate:
           - SUCCESS: SUCCESS
           - FAILURE: on_failure
-    - get_jiraInstanceId:
-        do:
-          io.cloudslang.base.json.get_value:
-            - json_input: "${get_sp('MarketPlace.JIRAInstanceIDs')}"
-            - json_path: '${JiraInstance}'
-        publish:
-          - jiraPriorityId: '${return_result}'
-        navigate:
-          - SUCCESS: http_client_post
-          - FAILURE: on_failure
   outputs:
     - incidentCreationCode: '${incidentHttpStatusCode}'
     - incidentCreationResultJSON: '${jiraIncidentCreationResult}'
@@ -124,31 +124,31 @@ extensions:
       extractWathersList:
         x: 499
         'y': 116
-      get_priorityId:
-        x: 713
-        'y': 113
-      http_client_post:
-        x: 921
-        'y': 112
-      get_jira_url:
-        x: 920
-        'y': 457
-      get_jira_issueid:
-        x: 723
-        'y': 454
-      updateSMAXRequest:
-        x: 531
-        'y': 453
-      getRequestAttachUploadJira:
-        x: 284
-        'y': 453
-        navigate:
-          fe22cd88-2ee0-30e8-d506-a369c6cb8e22:
-            targetId: 2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c
-            port: SUCCESS
       get_jiraInstanceId:
         x: 822
         'y': 239
+      get_priorityId:
+        x: 713
+        'y': 113
+      get_jira_issueid:
+        x: 732
+        'y': 457
+      getRequestAttachUploadJira:
+        x: 291.3333435058594
+        'y': 462.6666564941406
+        navigate:
+          95b17e64-d6f2-2e66-5b01-b3aef19d71c3:
+            targetId: 2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c
+            port: SUCCESS
+      updateSMAXRequest:
+        x: 541
+        'y': 463
+      get_jira_url_1:
+        x: 923
+        'y': 458
+      http_client_post:
+        x: 921
+        'y': 112
     results:
       SUCCESS:
         2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c:
