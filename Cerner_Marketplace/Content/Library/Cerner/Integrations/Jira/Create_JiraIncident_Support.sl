@@ -62,13 +62,23 @@ flow:
         navigate:
           - SUCCESS: get_jira_url
           - FAILURE: on_failure
+    - get_jiraInstanceId:
+        do:
+          io.cloudslang.base.json.get_value:
+            - json_input: "${get_sp('MarketPlace.JIRAInstanceIDs')}"
+            - json_path: '${JiraInstance}'
+        publish:
+          - JiraInstanceId: '${return_result}'
+        navigate:
+          - SUCCESS: http_client_post
+          - FAILURE: on_failure
     - get_jira_url:
         do:
           io.cloudslang.base.json.get_value:
             - json_input: '${jiraIncidentCreationResult}'
             - json_path: key
         publish:
-          - jiraPriorityId: "${get_sp('MarketPlace.jiraIssueURL')+'browse/'+return_result}"
+          - jiraIssueURL: "${get_sp('MarketPlace.jiraIssueURL')+'browse/'+return_result}"
         navigate:
           - SUCCESS: get_jira_issueid
           - FAILURE: on_failure
@@ -78,7 +88,7 @@ flow:
             - json_input: '${jiraIncidentCreationResult}'
             - json_path: id
         publish:
-          - jiraPriorityId: '${return_result}'
+          - jiraIssueId: '${return_result}'
         navigate:
           - SUCCESS: updateSMAXRequest
           - FAILURE: on_failure
@@ -100,16 +110,6 @@ flow:
         navigate:
           - SUCCESS: SUCCESS
           - FAILURE: on_failure
-    - get_jiraInstanceId:
-        do:
-          io.cloudslang.base.json.get_value:
-            - json_input: "${get_sp('MarketPlace.JIRAInstanceIDs')}"
-            - json_path: '${JiraInstance}'
-        publish:
-          - JiraInstanceId: '${return_result}'
-        navigate:
-          - SUCCESS: http_client_post
-          - FAILURE: on_failure
   outputs:
     - incidentCreationCode: '${incidentHttpStatusCode}'
     - incidentCreationResultJSON: '${jiraIncidentCreationResult}'
@@ -130,25 +130,25 @@ extensions:
       http_client_post:
         x: 921
         'y': 113
-      get_jira_url:
-        x: 924
-        'y': 457
-      get_jira_issueid:
-        x: 723
-        'y': 454
-      updateSMAXRequest:
-        x: 531
-        'y': 455
-      getRequestAttachUploadJira:
-        x: 283
-        'y': 453
-        navigate:
-          fe22cd88-2ee0-30e8-d506-a369c6cb8e22:
-            targetId: 2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c
-            port: SUCCESS
       get_jiraInstanceId:
         x: 822
         'y': 241
+      get_jira_url:
+        x: 934
+        'y': 452
+      get_jira_issueid:
+        x: 773
+        'y': 454
+      updateSMAXRequest:
+        x: 572
+        'y': 452
+      getRequestAttachUploadJira:
+        x: 365
+        'y': 452
+        navigate:
+          ae79329c-7992-22b1-ae0f-983a7333b506:
+            targetId: 2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c
+            port: SUCCESS
     results:
       SUCCESS:
         2e3e4a91-f4e1-ebf1-c5c8-4806ce62a06c:
