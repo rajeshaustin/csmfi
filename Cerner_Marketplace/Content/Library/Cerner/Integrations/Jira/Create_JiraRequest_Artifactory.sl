@@ -223,10 +223,10 @@ extensions:
         x: 387
         'y': 1
       updateSMAXRequest:
-        x: 101
+        x: 97
         'y': 323
       formatDescriptionForArtReqType:
-        x: 85
+        x: 86
         'y': 126
       http_client_post:
         x: 948
