@@ -5,4 +5,4 @@ properties:
   - confluenceUser: svcdfappsup
   - confluencePassword:
       value: Vxak9JyS
-      sensitive: false
+      sensitive: true
