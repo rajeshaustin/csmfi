@@ -52,9 +52,12 @@ flow:
         required: false
     - ArtifactoryRepoType:
         required: false
-    - ServiceAccountPermission
-    - ReplicationNeeded
-    - ProxyExternalRepository
+    - ServiceAccountPermission:
+        required: false
+    - ReplicationNeeded:
+        required: false
+    - ProxyExternalRepository:
+        required: false
   workflow:
     - formatDescriptionForArtReqType:
         do:
@@ -115,7 +118,7 @@ flow:
                 value: "${get_sp('MarketPlace.jiraPassword')}"
                 sensitive: true
             - tls_version: TLSv1.2
-            - body: "${'{    \"fields\": {         \"project\": { \"id\": \"'+projectId+'\" }, \"summary\": \"'+summary+'\", \"issuetype\": { \"id\": \"'+issueTypeId+'\"}, \"reporter\": { \"name\": \"'+reporter[0:reporter.find(\"@\")]+'\"}, \"priority\": { \"id\": \"'+jiraPriorityId+'\" }, \"'+criticalJustFieldId+'\": \"'+criticalityJustification+'\",\"description\": \"'+description+'\", \"'+jiraToolRequestFieldId+'\":{ \"id\": \"'+jiraToolRequest+'\" },  \"'+toolInstanceFieldId+'\": ['+artifactoryInstanceJSON+'],\"'+swLinkFieldId+'\": \"'+swLink+'\", \"'+artfactReqTypeFieldId+'\": { \"id\": \"'+jiraArtifactReqType+'\"}, \"'+swExistInNexusFieldId+'\": { \"id\": \"'+swExistInNexus+'\"},\"customfield_47221\": { \"id\": \"'+ArtifactoryRepoType+'\" },\"customfield_47222\": '+ServiceAccountPermission+'\",\"customfield_47223\": { \"id\": \"'+ReplicationNeeded+'\" },\"customfield_47224\": { \"id\": \"'+ProxyExternalRepository+'\" },\"'+watcherFieldId+'\": ['+watchersJSON+']  } }'}"
+            - body: "${'{    \"fields\": {         \"project\": { \"id\": \"'+projectId+'\" }, \"summary\": \"'+summary+'\", \"issuetype\": { \"id\": \"'+issueTypeId+'\"}, \"reporter\": { \"name\": \"'+reporter[0:reporter.find(\"@\")]+'\"}, \"priority\": { \"id\": \"'+jiraPriorityId+'\" }, \"'+criticalJustFieldId+'\": \"'+criticalityJustification+'\",\"description\": \"'+description+'\", \"'+jiraToolRequestFieldId+'\":{ \"id\": \"'+jiraToolRequest+'\" },  \"'+toolInstanceFieldId+'\": ['+artifactoryInstanceJSON+'],\"'+swLinkFieldId+'\": \"'+swLink+'\", \"'+artfactReqTypeFieldId+'\": { \"id\": \"'+jiraArtifactReqType+'\"}, \"'+swExistInNexusFieldId+'\": { \"id\": \"'+swExistInNexus+'\"},\"customfield_47221\": { \"id\": \"'+ArtifactoryRepoType+'\" },\"customfield_47222\": \"'+ServiceAccountPermission+'\",\"customfield_47223\": { \"id\": \"'+ReplicationNeeded+'\" },\"customfield_47224\": { \"id\": \"'+ProxyExternalRepository+'\" },\"'+watcherFieldId+'\": ['+watchersJSON+']  } }'}"
             - content_type: application/json
         publish:
           - jiraIncidentCreationResult: '${return_result}'
