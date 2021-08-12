@@ -62,6 +62,7 @@ flow:
             - restoreArtifactName: '${restoreArtifactName}'
             - restoreRepoLink: '${restoreRepositoryLink}'
             - descriptionIn: '${description}'
+            - createRepoLink: createRepoLink
         publish:
           - result
           - message
