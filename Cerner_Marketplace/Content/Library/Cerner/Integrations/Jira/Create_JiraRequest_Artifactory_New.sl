@@ -1,6 +1,6 @@
 namespace: Cerner.Integrations.Jira
 flow:
-  name: Create_JiraRequest_Artifactory
+  name: Create_JiraRequest_Artifactory_New
   inputs:
     - jiraToolRequestFieldId: customfield_47005
     - swLinkFieldId: customfield_47220
@@ -50,6 +50,14 @@ flow:
         required: false
     - jiraToolInstanceL5:
         required: false
+    - ArtifactoryRepoType:
+        required: false
+    - ServiceAccountPermission:
+        required: false
+    - ReplicationNeeded:
+        required: false
+    - ProxyExternalRepository:
+        required: false
   workflow:
     - formatDescriptionForArtReqType:
         do:
@@ -62,7 +70,7 @@ flow:
             - restoreArtifactName: '${restoreArtifactName}'
             - restoreRepoLink: '${restoreRepositoryLink}'
             - descriptionIn: '${description}'
-            - createRepoLink: createRepoLink
+            - createRepoLink: '${createRepo}'
         publish:
           - result
           - message
@@ -111,7 +119,7 @@ flow:
                 value: "${get_sp('MarketPlace.jiraPassword')}"
                 sensitive: true
             - tls_version: TLSv1.2
-            - body: "${'{    \"fields\": {         \"project\": { \"id\": \"'+projectId+'\" }, \"summary\": \"'+summary+'\", \"issuetype\": { \"id\": \"'+issueTypeId+'\"}, \"reporter\": { \"name\": \"'+reporter[0:reporter.find(\"@\")]+'\"}, \"priority\": { \"id\": \"'+jiraPriorityId+'\" }, \"'+criticalJustFieldId+'\": \"'+criticalityJustification+'\",\"description\": \"'+description+'\", \"'+jiraToolRequestFieldId+'\":{ \"id\": \"'+jiraToolRequest+'\" },  \"'+toolInstanceFieldId+'\": ['+artifactoryInstanceJSON+'],\"'+swLinkFieldId+'\": \"'+swLink+'\", \"'+artfactReqTypeFieldId+'\": { \"id\": \"'+jiraArtifactReqType+'\"}, \"'+swExistInNexusFieldId+'\": { \"id\": \"'+swExistInNexus+'\"}, \"'+watcherFieldId+'\": ['+watchersJSON+']  } }'}"
+            - body: "${'{    \"fields\": {         \"project\": { \"id\": \"'+projectId+'\" }, \"summary\": \"'+summary+'\", \"issuetype\": { \"id\": \"'+issueTypeId+'\"}, \"reporter\": { \"name\": \"'+reporter[0:reporter.find(\"@\")]+'\"}, \"priority\": { \"id\": \"'+jiraPriorityId+'\" }, \"'+criticalJustFieldId+'\": \"'+criticalityJustification+'\",\"description\": \"'+description+'\", \"'+jiraToolRequestFieldId+'\":{ \"id\": \"'+jiraToolRequest+'\" },  \"'+toolInstanceFieldId+'\": ['+artifactoryInstanceJSON+'],\"'+swLinkFieldId+'\": \"'+swLink+'\", \"'+artfactReqTypeFieldId+'\": { \"id\": \"'+jiraArtifactReqType+'\"}, \"'+swExistInNexusFieldId+'\": { \"id\": \"'+swExistInNexus+'\"},\"customfield_47221\": { \"id\": \"'+ArtifactoryRepoType+'\" },\"customfield_47222\": \"'+ServiceAccountPermission+'\",\"customfield_47223\": { \"id\": \"'+ReplicationNeeded+'\" },\"customfield_47224\": { \"id\": \"'+ProxyExternalRepository+'\" },\"'+watcherFieldId+'\": ['+watchersJSON+']  } }'}"
             - content_type: application/json
         publish:
           - jiraIncidentCreationResult: '${return_result}'
