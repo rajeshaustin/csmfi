@@ -125,7 +125,7 @@ flow:
                 value: "${get_sp('MarketPlace.jiraPassword')}"
                 sensitive: true
             - tls_version: TLSv1.2
-            - body: "${'{    \"fields\": {         \"project\": { \"id\": \"'+projectId+'\" }, \"summary\": \"'+summary+'\", \"issuetype\": { \"id\": \"'+issueTypeId+'\"}, \"reporter\": { \"name\": \"'+reporter[0:reporter.find(\"@\")]+'\"}, \"priority\": { \"id\": \"'+jiraPriorityId+'\" }, \"'+criticalJustFieldId+'\": \"'+criticalityJustification+'\",\"description\": \"'+description+'\", \"'+jiraToolRequestFieldId+'\":{ \"id\": \"'+jiraToolRequest+'\" },  \"'+toolInstanceFieldId+'\": ['+artifactoryInstanceJSON+'],\"'+swLinkFieldId+'\": \"'+swLink+'\", \"'+artfactReqTypeFieldId+'\": { \"id\": \"'+jiraArtifactReqType+'\"}, \"'+swExistInNexusFieldId+'\": { \"id\": \"'+swExistInNexus+'\"},\"customfield_47221\": { \"id\": \"'+RepoTypeID+'\" },\"customfield_47222\": \"'+ServiceAccountPermission+'\",\"customfield_47223\": { \"id\": \"'+ReplicationID+'\" },\"customfield_47224\": { \"id\": \"'+ProxyExternalID+'\" },\"'+watcherFieldId+'\": ['+watchersJSON+']  } }'}"
+            - body: "${'{    \"fields\": {         \"project\": { \"id\": \"'+projectId+'\" }, \"summary\": \"'+summary+'\", \"issuetype\": { \"id\": \"'+issueTypeId+'\"}, \"reporter\": { \"name\": \"'+reporter[0:reporter.find(\"@\")]+'\"}, \"priority\": { \"id\": \"'+jiraPriorityId+'\" }, \"'+criticalJustFieldId+'\": \"'+criticalityJustification.strip()+'\",\"description\": \"'+description+'\", \"'+jiraToolRequestFieldId+'\":{ \"id\": \"'+jiraToolRequest+'\" },  \"'+toolInstanceFieldId+'\": ['+artifactoryInstanceJSON+'],\"'+swLinkFieldId+'\": \"'+swLink+'\", \"'+artfactReqTypeFieldId+'\": { \"id\": \"'+jiraArtifactReqType+'\"}, \"'+swExistInNexusFieldId+'\": { \"id\": \"'+swExistInNexus+'\"},\"customfield_47221\": { \"id\": \"'+RepoTypeID.strip()+'\" },\"customfield_47222\": \"'+ServiceAccountPermission.strip()+'\",\"customfield_47223\": { \"id\": \"'+ReplicationID.strip()+'\" },\"customfield_47224\": { \"id\": \"'+ProxyExternalID.strip()+'\" },\"'+watcherFieldId+'\": ['+watchersJSON+']  } }'}"
             - content_type: application/json
         publish:
           - jiraIncidentCreationResult: '${return_result}'
@@ -207,7 +207,7 @@ flow:
           - RepoTypeID: '${return_result}'
         navigate:
           - SUCCESS: get_replicationID
-          - FAILURE: on_failure
+          - FAILURE: get_replicationID
     - get_replicationID:
         do:
           io.cloudslang.base.json.get_value:
@@ -217,7 +217,7 @@ flow:
           - ReplicationID: '${return_result}'
         navigate:
           - SUCCESS: get_proxyExternalID
-          - FAILURE: on_failure
+          - FAILURE: get_proxyExternalID
     - get_proxyExternalID:
         do:
           io.cloudslang.base.json.get_value:
@@ -227,7 +227,7 @@ flow:
           - ProxyExternalID: '${return_result}'
         navigate:
           - SUCCESS: http_client_post
-          - FAILURE: on_failure
+          - FAILURE: http_client_post
   outputs:
     - incidentCreationCode: '${incidentHttpStatusCode}'
     - incidentCreationResultJSON: '${jiraIncidentCreationResult}'
