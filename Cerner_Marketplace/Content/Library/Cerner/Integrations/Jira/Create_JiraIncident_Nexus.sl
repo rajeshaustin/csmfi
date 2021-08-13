@@ -59,7 +59,7 @@ flow:
                 value: "${get_sp('MarketPlace.jiraPassword')}"
                 sensitive: true
             - tls_version: TLSv1.2
-            - body: "${'{    \"fields\": {         \"project\": { \"id\": \"'+projectId+'\" }, \"summary\": \"'+summary+'\", \"issuetype\": { \"id\": \"'+issueTypeId+'\"}, \"reporter\": { \"name\": \"'+reporter[0:reporter.find(\"@\")]+'\"}, \"priority\": { \"id\": \"'+jiraPriorityId+'\" }, \"customfield_47251\": \"'+criticalityJustification+'\",\"description\": \"'+description+'\", \"'+jiraToolFieldId+'\":{ \"id\": \"'+jiraTool+'\" }, \"'+watcherFieldId+'\": ['+watchersJSON+']  } }'}"
+            - body: "${'{    \"fields\": {         \"project\": { \"id\": \"'+projectId+'\" }, \"summary\": \"'+summary+'\", \"issuetype\": { \"id\": \"'+issueTypeId+'\"}, \"reporter\": { \"name\": \"'+reporter[0:reporter.find(\"@\")]+'\"}, \"priority\": { \"id\": \"'+jiraPriorityId+'\" }, \"customfield_47251\": \"'+criticalityJustification.strip()+'\",\"description\": \"'+description+'\", \"'+jiraToolFieldId+'\":{ \"id\": \"'+jiraTool+'\" }, \"'+watcherFieldId+'\": ['+watchersJSON+']  } }'}"
             - content_type: application/json
         publish:
           - jiraIncidentCreationResult: '${return_result}'
