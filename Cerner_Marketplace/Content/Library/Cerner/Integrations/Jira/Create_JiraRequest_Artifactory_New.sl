@@ -51,12 +51,16 @@ flow:
     - jiraToolInstanceL5:
         required: false
     - ArtifactoryRepoType:
+        default: ' '
         required: false
     - ServiceAccountPermission:
+        default: ' '
         required: false
     - ReplicationNeeded:
+        default: ' '
         required: false
     - ProxyExternalRepository:
+        default: ' '
         required: false
     - ReposityTypeLink:
         required: false
