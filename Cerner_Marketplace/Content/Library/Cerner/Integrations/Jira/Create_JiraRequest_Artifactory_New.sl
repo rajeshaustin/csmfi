@@ -109,7 +109,7 @@ flow:
         publish:
           - jiraPriorityId: '${return_result}'
         navigate:
-          - SUCCESS: http_client_post
+          - SUCCESS: get_repoTypeID
           - FAILURE: on_failure
     - http_client_post:
         do:
@@ -194,6 +194,36 @@ flow:
         navigate:
           - SUCCESS: createArtifactoryIdJSON
           - FAILURE: on_failure
+    - get_repoTypeID:
+        do:
+          io.cloudslang.base.json.get_value:
+            - json_input: "${get_sp('MarketPlace.ArtifactRepoType')}"
+            - json_path: '${RepoType}'
+        publish:
+          - RepoTypeID: '${return_result}'
+        navigate:
+          - SUCCESS: get_replicationID
+          - FAILURE: on_failure
+    - get_replicationID:
+        do:
+          io.cloudslang.base.json.get_value:
+            - json_input: "${get_sp('MarketPlace.ArtifactReplication')}"
+            - json_path: '${Replication}'
+        publish:
+          - ReplicationID: '${return_result}'
+        navigate:
+          - SUCCESS: get_proxyExternalID
+          - FAILURE: on_failure
+    - get_proxyExternalID:
+        do:
+          io.cloudslang.base.json.get_value:
+            - json_input: "${get_sp('MarketPlace.ArtifactProxyExternal')}"
+            - json_path: '${ProxyExternal}'
+        publish:
+          - ProxyExternalID: '${return_result}'
+        navigate:
+          - SUCCESS: http_client_post
+          - FAILURE: on_failure
   outputs:
     - incidentCreationCode: '${incidentHttpStatusCode}'
     - incidentCreationResultJSON: '${jiraIncidentCreationResult}'
@@ -206,17 +236,20 @@ extensions:
   graph:
     steps:
       extractWathersList:
-        x: 725
-        'y': 120
+        x: 686
+        'y': 30
       get_jira_url:
         x: 650
         'y': 320
       get_priorityId:
-        x: 945
-        'y': 115
+        x: 847
+        'y': 36
+      get_proxyExternalID:
+        x: 738
+        'y': 188
       createArtifactoryIdJSON:
-        x: 471
-        'y': 121
+        x: 534
+        'y': 26
       get_jira_issueid:
         x: 386
         'y': 318
@@ -230,6 +263,9 @@ extensions:
       get_artifactoryRequestType:
         x: 270
         'y': 122
+      get_repoTypeID:
+        x: 409
+        'y': 181
       get_SWExistsInNexus:
         x: 387
         'y': 1
@@ -242,6 +278,9 @@ extensions:
       http_client_post:
         x: 948
         'y': 319
+      get_replicationID:
+        x: 590
+        'y': 184
     results:
       SUCCESS:
         553ef829-1fc1-c109-9bb2-9238e57b896d:
