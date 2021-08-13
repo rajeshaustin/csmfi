@@ -198,7 +198,7 @@ flow:
         do:
           io.cloudslang.base.json.get_value:
             - json_input: "${get_sp('MarketPlace.ArtifactRepoType')}"
-            - json_path: '${RepoType}'
+            - json_path: '${ArtifactoryRepoType}'
         publish:
           - RepoTypeID: '${return_result}'
         navigate:
@@ -208,7 +208,7 @@ flow:
         do:
           io.cloudslang.base.json.get_value:
             - json_input: "${get_sp('MarketPlace.ArtifactReplication')}"
-            - json_path: '${Replication}'
+            - json_path: '${ReplicationNeeded}'
         publish:
           - ReplicationID: '${return_result}'
         navigate:
@@ -218,7 +218,7 @@ flow:
         do:
           io.cloudslang.base.json.get_value:
             - json_input: "${get_sp('MarketPlace.ArtifactProxyExternal')}"
-            - json_path: '${ProxyExternal}'
+            - json_path: '${ProxyExternalRepository}'
         publish:
           - ProxyExternalID: '${return_result}'
         navigate:
