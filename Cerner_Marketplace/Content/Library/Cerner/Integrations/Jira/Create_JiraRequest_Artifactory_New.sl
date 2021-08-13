@@ -58,6 +58,8 @@ flow:
         required: false
     - ProxyExternalRepository:
         required: false
+    - ReposityTypeLink:
+        required: false
   workflow:
     - formatDescriptionForArtReqType:
         do:
@@ -70,11 +72,7 @@ flow:
             - restoreArtifactName: '${restoreArtifactName}'
             - restoreRepoLink: '${restoreRepositoryLink}'
             - descriptionIn: '${description}'
-            - createRepoLink: '${createRepoLink}'
-            - CreateRepoArtifactType: '${CreateRepoArtifactType}'
-            - CreateRepoServiceAccount: '${CreateRepoServiceAccount}'
-            - CreateRepoReplication: '${CreateRepoReplication}'
-            - CreateRepoPoxy: '${CreateRepoPoxy}'
+            - ReposityTypeLink: '${ReposityTypeLink}'
         publish:
           - result
           - message
